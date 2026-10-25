@@ -40,7 +40,8 @@ The generated scripts require the following Python packages:
 
 ```bash
 pip install undetected-chromedriver selenium
+```
 
-> [!WARNING]
+## [!WARNING]
 > **Disclaimer**
 > This tool is provided for **educational and legitimate research purposes only**. Users are strictly responsible for complying with the Terms of Service, Robots.txt, and local laws of any external websites they interact with. The author holds no liability for IP bans, account suspensions, or legal consequences resulting from the misuse of generated scripts.
