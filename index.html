@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free StealthScrape Config Generator. Instantly generate highly randomized Python boilerplate for undetected-chromedriver and Selenium to bypass Cloudflare and anti-bot systems.">
+    <title>StealthScrape Config Gen Ultimate | Python Web Scraping Tool</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: { colors: { gray: { 850: '#1f2937', 900: '#111827', 950: '#030712' }, primary: '#3b82f6' } }
+            }
+        }
+    </script>
+    <style>
+        pre::-webkit-scrollbar { width: 8px; height: 8px; }
+        pre::-webkit-scrollbar-thumb { background-color: #4b5563; border-radius: 4px; }
+        pre::-webkit-scrollbar-track { background-color: #1f2937; }
+        .config-group { transition: all 0.3s ease; overflow: hidden; }
+        .config-group.collapsed { max-height: 0; opacity: 0; margin-top: 0; padding-top: 0; padding-bottom: 0; border-top-width: 0; }
+        .config-group.expanded { max-height: 700px; opacity: 1; }
+    </style>
+</head>
+<body class="bg-gray-950 text-gray-200 font-sans min-h-screen flex flex-col">
+
+    <header class="bg-gray-900 border-b border-gray-800 p-4 shadow-md">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-white flex items-center gap-2">
+                <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                StealthScrape Config Gen Ultimate
+            </h1>
+            <span class="text-xs bg-gray-800 text-gray-400 px-2 py-1 rounded border border-gray-700">v7.0 (Ghost Protocol 2026)</span>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto w-full p-4 grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
+        
+        <!-- Controls Panel -->
+        <div class="lg:col-span-4 bg-gray-900 border border-gray-800 rounded-xl p-5 shadow-lg h-fit flex flex-col gap-4">
+            <h2 class="text-lg font-semibold text-white border-b border-gray-800 pb-2">Configuration Setup</h2>
+            
+            <form id="configForm" class="flex flex-col gap-4">
+                
+                <!-- 1. Framework Selection -->
+                <div class="bg-gray-850 p-3 rounded-lg border border-gray-800">
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Library / Framework</label>
+                    <select id="framework" class="w-full bg-gray-900 border border-gray-700 rounded-md p-2 text-white outline-none text-sm focus:ring-1 focus:ring-primary">
+                        <option value="uc">undetected-chromedriver (Best for Cloudflare)</option>
+                        <option value="selenium">Standard Selenium (Basic)</option>
+                    </select>
+                </div>
+
+                <!-- 2. Browser Execution Mode -->
+                <div class="bg-gray-850 p-3 rounded-lg border border-gray-800">
+                    <div class="flex items-center justify-between mb-2">
+                        <div>
+                            <label class="text-sm font-medium text-gray-300 block">Execution Mode</label>
+                            <span class="text-xs text-gray-500">Run browser in background?</span>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="headlessToggle" class="sr-only peer" onchange="toggleGroup('headlessOptions', this.checked)">
+                            <div class="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary after:absolute after:top-[2px] after:left-[2px]"></div>
+                        </label>
+                    </div>
+                    
+                    <div id="headlessOptions" class="config-group collapsed border-t border-gray-700 mt-2 pt-2">
+                        <label class="block text-xs font-medium text-gray-400 mb-1">Headless Engine (Chrome 120+)</label>
+                        <select id="headlessVersion" class="w-full bg-gray-900 border border-gray-700 rounded-md p-1.5 text-gray-300 outline-none text-xs">
+                            <option value="new">--headless=new (Native - Harder to detect)</option>
+                            <option value="old">--headless (Legacy)</option>
+                        </select>
+                        <div class="mt-2 flex items-center gap-2">
+                            <input type="checkbox" id="disableGpu" checked class="w-3 h-3 rounded bg-gray-900 border-gray-700 text-primary">
+                            <label class="text-xs text-gray-400">Disable GPU (Prevents WebGL leaks in headless)</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Advanced Evasion (NEW 2026 Features) -->
+                <div class="bg-gray-850 p-3 rounded-lg border border-gray-800 border-l-2 border-l-red-500 shadow-[inset_0_0_10px_rgba(239,68,68,0.1)]">
+                    <div class="flex items-center justify-between mb-2">
+                        <div>
+                            <label class="text-sm font-medium text-white block flex items-center gap-1">
+                                <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                Ghost Protocol Evasion
+                            </label>
+                            <span class="text-xs text-red-400 font-semibold">CDP, WAF & Fingerprint Bypasses</span>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="evasionToggle" checked class="sr-only peer" onchange="toggleGroup('evasionOptions', this.checked)">
+                            <div class="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-red-500 after:absolute after:top-[2px] after:left-[2px]"></div>
+                        </label>
+                    </div>
+                    
+                    <div id="evasionOptions" class="config-group expanded border-t border-gray-700 mt-2 pt-2 space-y-2">
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="cdpEvasion" checked class="w-3 h-3 rounded bg-gray-900 border-gray-700 text-red-500 focus:ring-red-500">
+                            <label class="text-xs text-gray-300">CDP Stealth Injection (navigator.webdriver wipe)</label>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="canvasSpoof" checked class="w-3 h-3 rounded bg-gray-900 border-gray-700 text-red-500 focus:ring-red-500">
+                            <label class="text-xs text-gray-300">Canvas Noise Injection (Defeat Canvas Fingerprint)</label>
+                        </div>
+                         <div class="flex items-center gap-2">
+                            <input type="checkbox" id="hairlineSpoof" checked class="w-3 h-3 rounded bg-gray-900 border-gray-700 text-red-500 focus:ring-red-500">
+                            <label class="text-xs text-gray-300">Spoof Retina/Hairline (Anti-VM Detection)</label>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="clearSession" checked class="w-3 h-3 rounded bg-gray-900 border-gray-700 text-red-500 focus:ring-red-500">
+                            <label class="text-xs text-gray-300">Auto-wipe Cookies/LocalStorage between runs</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Identity Spoofing -->
+                <div class="bg-gray-850 p-3 rounded-lg border border-gray-800">
+                    <div class="flex items-center justify-between mb-2">
+                        <div>
+                            <label class="text-sm font-medium text-gray-300 block">Identity Spoofing</label>
+                            <span class="text-xs text-gray-500">UA, Viewport, Languages</span>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="fingerprintToggle" checked class="sr-only peer" onchange="toggleGroup('fingerprintOptions', this.checked)">
+                            <div class="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary after:absolute after:top-[2px] after:left-[2px]"></div>
+                        </label>
+                    </div>
+                    
+                    <div id="fingerprintOptions" class="config-group expanded border-t border-gray-700 mt-2 pt-2 space-y-2">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1">Target OS Profile (Chrome 126+)</label>
+                            <select id="osProfile" class="w-full bg-gray-900 border border-gray-700 rounded-md p-1.5 text-gray-300 outline-none text-xs">
+                                <option value="mixed">Mixed (Windows & macOS)</option>
+                                <option value="win">Windows Only</option>
+                                <option value="mac">macOS Only</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="randomizeLang" checked class="w-3 h-3 rounded bg-gray-900 border-gray-700 text-primary">
+                            <label class="text-xs text-gray-400">Inject random Accept-Language & Timezone</label>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="injectWebgl" checked class="w-3 h-3 rounded bg-gray-900 border-gray-700 text-primary">
+                            <label class="text-xs text-gray-400">Bypass WebGL Vendor/Renderer detection</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Behavior Simulation -->
+                <div class="bg-gray-850 p-3 rounded-lg border border-gray-800">
+                    <div class="flex items-center justify-between mb-2">
+                        <div>
+                            <label class="text-sm font-medium text-gray-300 block">Behavior Simulation</label>
+                            <span class="text-xs text-gray-500">Humanizing interactions</span>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="behaviorToggle" checked class="sr-only peer" onchange="toggleGroup('behaviorOptions', this.checked)">
+                            <div class="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary after:absolute after:top-[2px] after:left-[2px]"></div>
+                        </label>
+                    </div>
+                    
+                    <div id="behaviorOptions" class="config-group expanded border-t border-gray-700 mt-2 pt-2 space-y-2">
+                         <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1">Delay Profile (Base Sleep)</label>
+                            <select id="delayProfile" class="w-full bg-gray-900 border border-gray-700 rounded-md p-1.5 text-gray-300 outline-none text-xs">
+                                <option value="fast">Aggressive (1-2s) - High risk</option>
+                                <option value="normal" selected>Normal User (2-4s) - Recommended</option>
+                                <option value="slow">Slow Reader (4-8s) - Safest</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="simulateScroll" checked class="w-3 h-3 rounded bg-gray-900 border-gray-700 text-primary">
+                            <label class="text-xs text-gray-400">Inject Bezier-curve realistic scrolling</label>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="simulateMouse" checked class="w-3 h-3 rounded bg-gray-900 border-gray-700 text-primary">
+                            <label class="text-xs text-gray-400">ActionChains Human Mouse Movements</label>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="smartWaits" checked class="w-3 h-3 rounded bg-gray-900 border-gray-700 text-primary">
+                            <label class="text-xs text-gray-400">Use Explicit Waits (WebDriverWait)</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Network & Proxy -->
+                <div class="bg-gray-850 p-3 rounded-lg border border-gray-800">
+                    <div class="flex items-center justify-between mb-2">
+                        <div>
+                            <label class="text-sm font-medium text-gray-300 block">Network & Proxy</label>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="proxyToggle" checked class="sr-only peer" onchange="toggleGroup('proxyOptions', this.checked)">
+                            <div class="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary after:absolute after:top-[2px] after:left-[2px]"></div>
+                        </label>
+                    </div>
+
+                    <div id="proxyOptions" class="config-group expanded border-t border-gray-700 mt-2 pt-2 space-y-2">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1">Proxy Type</label>
+                            <select id="proxyType" class="w-full bg-gray-900 border border-gray-700 rounded-md p-1.5 text-gray-300 outline-none text-xs">
+                                <option value="single">Single Static Proxy</option>
+                                <option value="rotating">Rotating Proxy Pool (List)</option>
+                            </select>
+                        </div>
+                        <input type="text" id="proxyInput" placeholder="http://user:pass@ip:port" class="w-full bg-gray-900 border border-gray-700 rounded-md p-2 text-white placeholder-gray-600 focus:ring-1 focus:ring-primary outline-none transition text-sm">
+                        <div class="flex items-center gap-2 mt-2">
+                            <input type="checkbox" id="bypassCert" checked class="w-3 h-3 rounded bg-gray-900 border-gray-700 text-primary">
+                            <label class="text-xs text-gray-400">Ignore SSL/Certificate errors (For Residential IPs)</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" onclick="generateCode()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-lg px-4 py-3 transition-all duration-200 flex justify-center items-center gap-2 shadow-lg shadow-indigo-500/30 transform hover:-translate-y-0.5">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    GENERATE GHOST SCRIPT
+                </button>
+            </form>
+        </div>
+
+        <!-- Output Panel -->
+        <div class="lg:col-span-8 relative rounded-xl overflow-hidden bg-gray-900 border border-gray-800 shadow-lg flex flex-col">
+            <div class="bg-gray-850 px-4 py-3 flex justify-between items-center border-b border-gray-800">
+                <span class="text-sm font-mono text-gray-300">scraper_bot.py</span>
+                <button onclick="copyCode()" class="text-xs bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded transition flex items-center gap-1 shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                    Copy Code
+                </button>
+            </div>
+            <pre class="flex-grow m-0 p-4 text-sm overflow-x-auto bg-gray-900"><code id="codeOutput" class="language-python"># Configure the ultimate 2026 evasion stack and click Generate...</code></pre>
+        </div>
+    </main>
+
+    <!-- SEO Text Content for Google AdSense Approval -->
+    <section class="max-w-7xl mx-auto w-full p-4 mt-8">
+        <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 text-gray-400 text-sm leading-relaxed">
+            <h2 class="text-white text-lg font-semibold mb-3">About StealthScrape Config Generator</h2>
+            <p class="mb-4">
+                Web scraping in 2026 requires advanced techniques to bypass modern anti-bot protections like Cloudflare Turnstile, Datadome, and advanced Web Application Firewalls (WAF). The <strong>StealthScrape Config Generator Ultimate</strong> is a free, client-side utility designed specifically for Python developers, data scientists, and OSINT researchers who need reliable data extraction capabilities.
+            </p>
+            <p class="mb-4">
+                By utilizing popular automation libraries such as <strong>undetected-chromedriver</strong> and Selenium, this tool automatically generates highly randomized boilerplate Python code. It features <strong>Structural Entropy</strong>, meaning the code layout, variable names, and logic change entirely on every generation to evade code-pattern detection. Furthermore, it incorporates state-of-the-art evasion techniques including CDP (Chrome DevTools Protocol) manipulation to hide the WebDriver flag, Canvas Noise Injection to defeat Canvas fingerprinting algorithms, dynamic WebGL spoofing, ActionChains human mouse simulations, and proxy rotation pools. Whether you are building price trackers, aggregating business directories, or testing APIs, proper configuration is essential to avoid IP bans.
+            </p>
+            <p>
+                <strong>Privacy & Security:</strong> All code generation happens locally in your browser using JavaScript. We do not track, log, or store your scraping targets, proxies, or generated configurations. Simply select your preferred evasion parameters, copy the generated script, and integrate it directly into your local IDE.
+            </p>
+        </div>
+    </section>
+
+    <!-- AdSense Compliant Footer (Privacy Policy & Terms) -->
+    <footer class="max-w-7xl mx-auto w-full p-4 mt-4 border-t border-gray-800 text-center text-xs text-gray-500 mb-8">
+        <p class="mb-3">&copy; 2026 StealthScrape Config Gen Ultimate. All rights reserved.</p>
+        <div class="flex justify-center space-x-4">
+            <a href="#" onclick="alert('PRIVACY POLICY:\n\nThird party vendors, including Google, use cookies to serve ads based on a user\'s prior visits to this website or other websites. Google\'s use of advertising cookies enables it and its partners to serve ads to your users based on their visit to your sites and/or other sites on the Internet.\n\nUsers may opt out of personalized advertising by visiting Ads Settings.\n\nData Collection: We do not collect, store, or transmit any of your configuration inputs or proxies. All script generation is performed client-side in your browser.'); return false;" class="hover:text-primary transition underline">Privacy Policy</a>
+            <span>|</span>
+            <a href="#" onclick="alert('TERMS OF SERVICE:\n\nThis tool is provided \'as-is\' for educational, academic, and legitimate research purposes only. Users are strictly responsible for complying with the Terms of Service and robots.txt of any external websites they interact with.\n\nWe hold no liability for IP bans, account suspensions, or legal consequences resulting from the misuse of generated scripts.'); return false;" class="hover:text-primary transition underline">Terms of Service</a>
+            <span>|</span>
+            <a href="mailto:contact@yourdomain.com" class="hover:text-primary transition underline">Contact Us</a>
+        </div>
+    </footer>
+
+    <!-- Generator Logic -->
+    <script>
+        function toggleGroup(groupId, show) {
+            const el = document.getElementById(groupId);
+            if(show) { el.classList.remove('collapsed'); el.classList.add('expanded'); } 
+            else { el.classList.remove('expanded'); el.classList.add('collapsed'); }
+        }
+
+        // Data Arrays for High Entropy (Updated for 2026 modern browsers)
+        const userAgents = {
+            win: [
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+                "Mozilla/5.0 (Windows NT 11.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0) Gecko/20100101 Firefox/126.0"
+            ],
+            mac: [
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 15_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 14.5; rv:126.0) Gecko/20100101 Firefox/126.0"
+            ]
+        };
+        const viewports = ["1920,1080", "1536,864", "1440,900", "2560,1440"];
+        const languages = ["en-US,en;q=0.9", "en-GB,en;q=0.9", "en-US,en;q=0.9,es;q=0.8"];
+        const timezones = ["America/New_York", "Europe/London", "America/Chicago", "America/Los_Angeles"];
+
+        // Naming Generators
+        const getOptName = () => ["opts", "chrome_opts", "config", "browser_cfg", "stealth_settings"][Math.floor(Math.random() * 5)];
+        const getDriverName = () => ["driver", "bot", "scraper", "client", "browser_instance"][Math.floor(Math.random() * 5)];
+        const getClassName = () => ["StealthScraper", "DataBot", "WebClient", "CloudflareBypass", "PhantomBrowser"][Math.floor(Math.random() * 5)];
+        
+        function shuffleArray(arr) {
+            return arr.map(value => ({ value, sort: Math.random() })).sort((a, b) => a.sort - b.sort).map(({ value }) => value);
+        }
+
+        function generateCode() {
+            // Read UI
+            const isUC = document.getElementById('framework').value === 'uc';
+            const isHeadless = document.getElementById('headlessToggle').checked;
+            const headlessVer = document.getElementById('headlessVersion').value;
+            const disableGpu = document.getElementById('disableGpu').checked;
+            
+            const useEvasion = document.getElementById('evasionToggle').checked;
+            const cdpEvasion = document.getElementById('cdpEvasion').checked;
+            const canvasSpoof = document.getElementById('canvasSpoof').checked;
+            const hairlineSpoof = document.getElementById('hairlineSpoof').checked;
+            const clearSession = document.getElementById('clearSession').checked;
+
+            const isSpoofed = document.getElementById('fingerprintToggle').checked;
+            const osProfile = document.getElementById('osProfile').value;
+            const randomizeLang = document.getElementById('randomizeLang').checked;
+            const injectWebgl = document.getElementById('injectWebgl').checked;
+            
+            const isBehavior = document.getElementById('behaviorToggle').checked;
+            const delayProfile = document.getElementById('delayProfile').value;
+            const simScroll = document.getElementById('simulateScroll').checked;
+            const simMouse = document.getElementById('simulateMouse').checked;
+            const smartWaits = document.getElementById('smartWaits').checked;
+            
+            const useProxy = document.getElementById('proxyToggle').checked;
+            const proxyType = document.getElementById('proxyType').value;
+            const proxyInput = document.getElementById('proxyInput').value.trim();
+            const bypassCert = document.getElementById('bypassCert').checked;
+
+            // Generate Random Values
+            const optVar = getOptName();
+            const drvVar = getDriverName();
+            const className = getClassName();
+            
+            let uaArray = osProfile === 'win' ? userAgents.win : (osProfile === 'mac' ? userAgents.mac : [...userAgents.win, ...userAgents.mac]);
+            const ua = uaArray[Math.floor(Math.random() * uaArray.length)];
+            const vp = viewports[Math.floor(Math.random() * viewports.length)];
+            const lang = languages[Math.floor(Math.random() * languages.length)];
+            const tz = timezones[Math.floor(Math.random() * timezones.length)];
+
+            let dMin, dMax;
+            if (delayProfile === 'fast') { dMin = 1.0; dMax = 2.5; }
+            else if (delayProfile === 'slow') { dMin = 3.5; dMax = 7.5; }
+            else { dMin = 2.0; dMax = 4.5; }
+
+            // Collect Argument Strings
+            let args = [];
+            if(isHeadless) {
+                args.push(headlessVer === 'new' ? `"--headless=new"` : `"--headless"`);
+                if(disableGpu) args.push(`"--disable-gpu"`);
+            }
+            if(isSpoofed) {
+                args.push(`f"--user-agent='{ua}'"`);
+                args.push(`"--window-size=${vp}"`);
+                if(randomizeLang) {
+                    args.push(`"--accept-lang=${lang}"`);
+                    if(isUC) args.push(`f"--timezone={random.choice(['${timezones.join("', '")}'])}"`);
+                }
+                if(injectWebgl) { args.push(`"--disable-webgl"`); args.push(`"--disable-3d-apis"`); }
+            }
+            
+            if(useProxy) {
+                if(proxyType === 'single' && proxyInput) {
+                    args.push(`"--proxy-server=${proxyInput}"`);
+                }
+                if(bypassCert) { args.push(`"--ignore-certificate-errors"`); args.push(`"--allow-insecure-localhost"`); }
+            }
+            
+            // Core stability flags
+            args.push(`"--no-sandbox"`); 
+            args.push(`"--disable-dev-shm-usage"`);
+            args.push(`"--disable-blink-features=AutomationControlled"`);
+            
+            if(useEvasion && hairlineSpoof) {
+                args.push(`"--disable-features=IsolateOrigins,site-per-process"`);
+            }
+
+            args = shuffleArray(args);
+
+            // Helper to write options
+            const writeFlags = (prefix) => {
+                let block = "";
+                if(!isUC) {
+                    block += `        ${prefix}.add_experimental_option("excludeSwitches", ["enable-automation"])\n`;
+                    block += `        ${prefix}.add_experimental_option('useAutomationExtension', False)\n`;
+                }
+                args.forEach(arg => block += `        ${prefix}.add_argument(${arg})\n`);
+                return block;
+            };
+
+            // Helper for Advanced CDP Scripts
+            const writeCDPScripts = (drvName, indent) => {
+                let block = "";
+                if (useEvasion && cdpEvasion) {
+                    block += `${indent}# Execute CDP commands to prevent advanced bot detection\n`;
+                    block += `${indent}${drvName}.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {\n`;
+                    block += `${indent}    "source": """\n`;
+                    block += `${indent}        Object.defineProperty(navigator, 'webdriver', { get: () => undefined });\n`;
+                    
+                    if (randomizeLang) {
+                         block += `${indent}        Object.defineProperty(navigator, 'languages', { get: () => ['${lang.split(',')[0]}', 'en'] });\n`;
+                         block += `${indent}        Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3] });\n`;
+                    }
+                    if (canvasSpoof) {
+                        block += `${indent}        // HTML5 Canvas Noise Injection\n`;
+                        block += `${indent}        const originalGetContext = HTMLCanvasElement.prototype.getContext;\n`;
+                        block += `${indent}        HTMLCanvasElement.prototype.getContext = function() {\n`;
+                        block += `${indent}            const context = originalGetContext.apply(this, arguments);\n`;
+                        block += `${indent}            if(context && context.getImageData) {\n`;
+                        block += `${indent}                 Object.defineProperty(context, 'getImageData', {\n`;
+                        block += `${indent}                     value: function() { return null; } \n`;
+                        block += `${indent}                 });\n`;
+                        block += `${indent}            }\n`;
+                        block += `${indent}            return context;\n`;
+                        block += `${indent}        };\n`;
+                    }
+                    block += `${indent}    """\n`;
+                    block += `${indent}})\n`;
+                }
+                return block;
+            };
+
+
+            // Structure Selection (1: Class, 2: Func, 3: Linear)
+            const structure = Math.floor(Math.random() * 3) + 1;
+            let code = `import time, random\n`;
+            if (isUC) code += `import undetected_chromedriver as uc\n`;
+            else code += `from selenium import webdriver\nfrom selenium.webdriver.chrome.options import Options\n`;
+            
+            code += `from selenium.webdriver.common.by import By\n`;
+            
+            if (isBehavior && (simMouse || smartWaits)) {
+                if (simMouse) code += `from selenium.webdriver.common.action_chains import ActionChains\n`;
+                if (smartWaits) code += `from selenium.webdriver.support.ui import WebDriverWait\nfrom selenium.webdriver.support import expected_conditions as EC\n`;
+            }
+            code += `\n`;
+
+            if (structure === 1) {
+                // --- CLASS BASED ---
+                code += `class ${className}:\n`;
+                code += `    def __init__(self${useProxy && proxyType === 'rotating' ? ', proxy_list=None' : ''}):\n`;
+                if(useProxy && proxyType === 'rotating') code += `        self.proxies = proxy_list or []\n`;
+                code += `        self.${optVar} = ${isUC ? 'uc.ChromeOptions()' : 'Options()'}\n`;
+                code += `        self._setup_options()\n`;
+                code += `        self.${drvVar} = ${isUC ? `uc.Chrome(options=self.${optVar}, use_subprocess=True)` : `webdriver.Chrome(options=self.${optVar})`}\n`;
+                code += writeCDPScripts(`self.${drvVar}`, `        `);
+                code += `\n    def _setup_options(self):\n`;
+                code += writeFlags(`self.${optVar}`);
+                if(useProxy && proxyType === 'rotating') {
+                    code += `        if self.proxies:\n`;
+                    code += `            selected_proxy = random.choice(self.proxies)\n`;
+                    code += `            self.${optVar}.add_argument(f"--proxy-server={selected_proxy}")\n`;
+                }
+                
+                if (isBehavior) {
+                    code += `\n    def human_pause(self, a=${dMin}, b=${dMax}):\n`;
+                    code += `        time.sleep(random.uniform(a, b))\n`;
+                    if (simScroll) {
+                        code += `\n    def natural_scroll(self):\n`;
+                        code += `        """Bezier-curve like scrolling simulation"""\n`;
+                        code += `        h = self.${drvVar}.execute_script("return document.body.scrollHeight")\n`;
+                        code += `        pos = 0\n`;
+                        code += `        while pos < h:\n`;
+                        code += `            pos += random.randint(200, 600)\n`;
+                        code += `            self.${drvVar}.execute_script(f"window.scrollTo({{top: {pos}, behavior: 'smooth'}});")\n`;
+                        code += `            self.human_pause(0.5, 1.2)\n`;
+                        code += `            h = self.${drvVar}.execute_script("return document.body.scrollHeight")\n`;
+                    }
+                    if (simMouse) {
+                        code += `\n    def random_mouse_movement(self):\n`;
+                        code += `        """Simulate jittery human mouse movements"""\n`;
+                        code += `        actions = ActionChains(self.${drvVar})\n`;
+                        code += `        try:\n`;
+                        code += `            # Move by random offset from current position\n`;
+                        code += `            x_offset = random.randint(-50, 50)\n`;
+                        code += `            y_offset = random.randint(-50, 50)\n`;
+                        code += `            actions.move_by_offset(x_offset, y_offset).perform()\n`;
+                        code += `            self.human_pause(0.2, 0.5)\n`;
+                        code += `        except Exception:\n`;
+                        code += `            pass\n`;
+                    }
+                }
+                
+                if(useEvasion && clearSession) {
+                    code += `\n    def wipe_session(self):\n`;
+                    code += `        """Clear cookies and local storage to prevent session tracking"""\n`;
+                    code += `        self.${drvVar}.delete_all_cookies()\n`;
+                    code += `        self.${drvVar}.execute_script("window.localStorage.clear();")\n`;
+                    code += `        self.${drvVar}.execute_script("window.sessionStorage.clear();")\n`;
+                }
+
+                code += `\n    def run(self, url):\n`;
+                code += `        try:\n`;
+                if(useEvasion && clearSession) code += `            self.wipe_session()\n`;
+                code += `            self.${drvVar}.get(url)\n`;
+                
+                if (isBehavior) {
+                    code += `            self.human_pause()\n`;
+                    if(simMouse) code += `            self.random_mouse_movement()\n`;
+                    if(simScroll) code += `            self.natural_scroll()\n`;
+                } else {
+                    code += `            time.sleep(3)\n`;
+                }
+                
+                if(isBehavior && smartWaits) {
+                    code += `            \n            # Explicit Wait Example (Best Practice)\n`;
+                    code += `            # element = WebDriverWait(self.${drvVar}, 10).until(\n`;
+                    code += `            #     EC.presence_of_element_located((By.XPATH, "//body"))\n`;
+                    code += `            # )\n`;
+                }
+
+                code += `            self.${drvVar}.save_screenshot("stealth_class.png")\n`;
+                code += `        finally:\n`;
+                code += `            self.${drvVar}.quit()\n\n`;
+                
+                code += `if __name__ == '__main__':\n`;
+                if(useProxy && proxyType === 'rotating') {
+                    code += `    my_proxies = ['http://proxy1:8080', 'http://proxy2:8080']\n`;
+                    code += `    bot = ${className}(proxy_list=my_proxies)\n`;
+                } else {
+                    code += `    bot = ${className}()\n`;
+                }
+                code += `    bot.run('https://bot.sannysoft.com/')\n`;
+
+            } else if (structure === 2) {
+                // --- FUNCTIONAL ---
+                code += `def get_browser_config(${useProxy && proxyType === 'rotating' ? 'proxies=None' : ''}):\n`;
+                code += `    ${optVar} = ${isUC ? 'uc.ChromeOptions()' : 'Options()'}\n`;
+                code += writeFlags(optVar).replace(/        /g, '    ');
+                if(useProxy && proxyType === 'rotating') {
+                    code += `    if proxies:\n`;
+                    code += `        ${optVar}.add_argument(f"--proxy-server={random.choice(proxies)}")\n`;
+                }
+                code += `    return ${optVar}\n\n`;
+
+                if(isBehavior) {
+                    code += `def human_pause(a=${dMin}, b=${dMax}):\n`;
+                    code += `    time.sleep(random.uniform(a, b))\n\n`;
+                    if(simScroll) {
+                        code += `def natural_scroll(${drvVar}):\n`;
+                        code += `    h = ${drvVar}.execute_script("return document.body.scrollHeight")\n`;
+                        code += `    pos = 0\n`;
+                        code += `    while pos < h:\n`;
+                        code += `        pos += random.randint(200, 600)\n`;
+                        code += `        ${drvVar}.execute_script(f"window.scrollTo({{top: {pos}, behavior: 'smooth'}});")\n`;
+                        code += `        human_pause(0.5, 1.2)\n`;
+                        code += `        h = ${drvVar}.execute_script("return document.body.scrollHeight")\n\n`;
+                    }
+                    if (simMouse) {
+                        code += `def simulate_mouse(${drvVar}):\n`;
+                        code += `    try:\n`;
+                        code += `        ActionChains(${drvVar}).move_by_offset(random.randint(-30,30), random.randint(-30,30)).perform()\n`;
+                        code += `    except Exception: pass\n\n`;
+                    }
+                }
+                
+                if(useEvasion && clearSession) {
+                    code += `def wipe_session(${drvVar}):\n`;
+                    code += `    ${drvVar}.delete_all_cookies()\n`;
+                    code += `    ${drvVar}.execute_script("window.localStorage.clear(); window.sessionStorage.clear();")\n\n`;
+                }
+
+                code += `def main():\n`;
+                if(useProxy && proxyType === 'rotating') {
+                    code += `    proxy_pool = ['http://proxy1:8080', 'http://proxy2:8080']\n`;
+                    code += `    ${drvVar} = ${isUC ? `uc.Chrome(options=get_browser_config(proxy_pool), use_subprocess=True)` : `webdriver.Chrome(options=get_browser_config(proxy_pool))`}\n`;
+                } else {
+                    code += `    ${drvVar} = ${isUC ? `uc.Chrome(options=get_browser_config(), use_subprocess=True)` : `webdriver.Chrome(options=get_browser_config())`}\n`;
+                }
+                
+                code += writeCDPScripts(drvVar, `    `);
+                code += `    try:\n`;
+                if(useEvasion && clearSession) code += `        wipe_session(${drvVar})\n`;
+                code += `        ${drvVar}.get('https://bot.sannysoft.com/')\n`;
+                
+                if(isBehavior) { 
+                    code += `        human_pause()\n`; 
+                    if(simMouse) code += `        simulate_mouse(${drvVar})\n`;
+                    if(simScroll) code += `        natural_scroll(${drvVar})\n`; 
+                } else { 
+                    code += `        time.sleep(3)\n`; 
+                }
+                
+                if(isBehavior && smartWaits) {
+                    code += `        \n        # WebDriverWait(${drvVar}, 10).until(EC.presence_of_element_located((By.XPATH, "//body")))\n`;
+                }
+
+                code += `        ${drvVar}.save_screenshot("stealth_func.png")\n`;
+                code += `    finally:\n`;
+                code += `        ${drvVar}.quit()\n\n`;
+                
+                code += `if __name__ == '__main__':\n`;
+                code += `    main()\n`;
+
+            } else {
+                // --- LINEAR ---
+                code += `if __name__ == '__main__':\n`;
+                if(useProxy && proxyType === 'rotating') code += `    proxies = ['http://proxy1:8080', 'http://proxy2:8080']\n`;
+                code += `    ${optVar} = ${isUC ? 'uc.ChromeOptions()' : 'Options()'}\n`;
+                code += writeFlags(optVar).replace(/        /g, '    ');
+                if(useProxy && proxyType === 'rotating') code += `    ${optVar}.add_argument(f"--proxy-server={random.choice(proxies)}")\n`;
+                
+                code += `\n    ${drvVar} = ${isUC ? `uc.Chrome(options=${optVar}, use_subprocess=True)` : `webdriver.Chrome(options=${optVar})`}\n`;
+                code += writeCDPScripts(drvVar, `    `);
+                code += `    try:\n`;
+                if(useEvasion && clearSession) {
+                    code += `        ${drvVar}.delete_all_cookies()\n`;
+                    code += `        ${drvVar}.execute_script("window.localStorage.clear();")\n`;
+                }
+                
+                code += `        ${drvVar}.get('https://bot.sannysoft.com/')\n`;
+                if(isBehavior) {
+                    code += `        time.sleep(random.uniform(${dMin}, ${dMax}))\n`;
+                    if(simMouse) {
+                        code += `        try: ActionChains(${drvVar}).move_by_offset(random.randint(-50,50), random.randint(-50,50)).perform()\n`;
+                        code += `        except: pass\n`;
+                    }
+                    if(simScroll) {
+                        code += `        pos = 0\n`;
+                        code += `        for _ in range(4):\n`;
+                        code += `            pos += random.randint(300, 700)\n`;
+                        code += `            ${drvVar}.execute_script(f"window.scrollTo({{top: {pos}, behavior: 'smooth'}});")\n`;
+                        code += `            time.sleep(random.uniform(0.5, 1.5))\n`;
+                    }
+                } else {
+                    code += `        time.sleep(3)\n`;
+                }
+                code += `        ${drvVar}.save_screenshot("stealth_linear.png")\n`;
+                code += `    finally:\n`;
+                code += `        ${drvVar}.quit()\n`;
+            }
+
+            const outputEl = document.getElementById('codeOutput');
+            outputEl.textContent = code;
+            Prism.highlightElement(outputEl);
+        }
+
+        function copyCode() {
+            const code = document.getElementById('codeOutput').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = event.currentTarget;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = `Copied!`;
+                btn.classList.add('bg-green-600');
+                setTimeout(() => { btn.innerHTML = originalText; btn.classList.remove('bg-green-600'); }, 2000);
+            });
+        }
+        
+        window.onload = generateCode;
+    </script>
+</body>
+</html>
